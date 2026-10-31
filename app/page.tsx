@@ -91,7 +91,7 @@ export default function Home() {
           <div className="hero-orb"><div className="orb-core"><Sparkles size={31}/></div><div className="orbit orbit-one"/><div className="orbit orbit-two"/></div>
           <h1>{active==="Galaxy Chat" || active==="Agents" ? <>Tu universo.<br/><em>Una nueva inteligencia.</em></> : active}</h1>
           <p className="subtitle">{active==="Galaxy Chat" ? "Un espacio para pensar, descubrir y crear sin límites." : active==="Agents" ? "Elige un especialista y trabaja con una guía enfocada en tu objetivo." : "Este módulo está planificado y se habilitará por etapas."}</p>
-          {active==="Galaxy Chat" ? <>
+          {(active==="Galaxy Chat" || active==="Agents") ? <>
             {active==="Galaxy Chat" && messages.length===0 && <div className="suggestions">
               <button onClick={()=>setMessage("Ayúdame a organizar una idea nueva.")}><BrainCircuit size={17}/><span><b>Explorar una idea</b><small>Convierte pensamientos en un plan</small></span></button>
               <button onClick={()=>setMessage("Ayúdame a crear un proyecto paso a paso.")}><Sparkles size={17}/><span><b>Crear un proyecto</b><small>Empieza con una hoja en blanco</small></span></button>
