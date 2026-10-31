@@ -1,0 +1,10 @@
+{
+  "name": "Galaxy AI Ultimate",
+  "short_name": "Galaxy AI",
+  "description": "Tu espacio inteligente para conversar, investigar y crear.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#080914",
+  "theme_color": "#080914",
+  "icons": [{ "src": "/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }]
+}
