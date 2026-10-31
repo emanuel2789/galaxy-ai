@@ -1,40 +1,35 @@
-# Galaxy AI Ultimate — Fundación 0.1
+# Galaxy AI Ultimate
 
-Primera base de la nueva versión web + móvil (PWA preparada), construida con Next.js y TypeScript.
+Base de Galaxy AI Ultimate para web y móvil, construida con Next.js 15, React 19 y TypeScript.
 
-## Estado actual
-- Interfaz adaptable a móvil y escritorio.
-- Navegación inicial por módulos.
-- Chat de demostración local: **no llama a ningún modelo de IA**.
-- Base preparada para despliegue en Vercel.
-- No requiere API key para ejecutar la demostración.
+## Estado de esta rama
+- Interfaz responsive con navegación por módulos.
+- Chat conectado a una ruta de servidor que utiliza la API de OpenAI Responses.
+- Clave de OpenAI y código de acceso solo en variables privadas del servidor.
+- Endpoint de estado que informa si la configuración está lista sin revelar secretos.
+- Manifiesto PWA e icono instalable.
+- Brain, Agents, Creative, Video Studio, Research y Analytics son espacios de interfaz; todavía no son funciones completas.
 
-## Requisitos
-- Node.js 20.9 o superior.
-- npm.
+## Variables privadas en Vercel
+Configura en Project Settings → Environment Variables:
+- `OPENAI_API_KEY`: clave de API, nunca en el navegador ni en Git.
+- `OPENAI_MODEL`: identificador exacto de un modelo disponible en tu proyecto API.
+- `GALAXY_ACCESS_CODE`: código largo y único que solo tú conozcas.
+- `NOTION_API_KEY`: opcional; reservado para la futura integración Notion.
 
-## Ejecutar
+Después de añadir o cambiar variables, crea un nuevo deployment.
+
+## Ejecutar localmente
+Requiere Node.js 20.9 o superior:
 ```bash
 npm install
 npm run dev
 ```
-Abre http://localhost:3000.
 
-## Publicar en Vercel
-1. Sube este proyecto a un repositorio GitHub.
-2. En Vercel, importa ese repositorio.
-3. Framework: Next.js; Build command: `npm run build`.
-4. Despliega. No añadas una API key para esta fase.
+## Comprobación
+- `GET /api/status` informa únicamente si las variables están configuradas.
+- `POST /api/chat` requiere `x-galaxy-access-code` y un JSON con `message`.
+- El endpoint aplica un límite básico en memoria. No es un limitador distribuido ni sustituye autenticación individual para un lanzamiento público.
 
-## Próximas fases
-1. Autenticación y base de datos con límites gratuitos.
-2. Endpoint de servidor para OpenAI, activado solo cuando exista presupuesto.
-3. Memoria y agentes con permisos.
-4. Integración de documentación con Notion.
-5. PWA completa y pruebas en Android.
-
-## Seguridad
-- Nunca pongas `OPENAI_API_KEY` en archivos `NEXT_PUBLIC_*`.
-- Nunca publiques secretos en GitHub.
-- La API de OpenAI puede generar cargos; esta versión no realiza llamadas a ella.
-- No se debe prometer uso gratuito de modelos de pago.
+## Seguridad y costes
+La API de OpenAI puede generar cargos según el modelo y el uso. No actives pagos ni publiques el servicio sin revisar los límites y costes con un adulto responsable. No publiques claves ni códigos en GitHub. Esta base no incluye autenticación individual, base de datos ni protección suficiente para abrirla al público general.
