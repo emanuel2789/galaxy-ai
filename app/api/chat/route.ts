@@ -57,7 +57,7 @@ export async function POST(request: NextRequest) {
   const requestedAgent = typeof body === "object" && body !== null && "agent" in body
     ? (body as { agent?: unknown }).agent
     : "general";
-  const agent = typeof requestedAgent === "string" && requestedAgent in agentInstructions
+  const agent = typeof requestedAgent === "string" && Object.prototype.hasOwnProperty.call(agentInstructions, requestedAgent)
     ? requestedAgent
     : "general";
   if (typeof message !== "string" || !message.trim() || message.length > 6000) {
