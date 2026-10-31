@@ -15,6 +15,15 @@ function rateLimited(ip: string) {
   return entry.count > 8;
 }
 
+const agentInstructions: Record<string, string> = {
+  general: "Eres Galaxy AI, un asistente útil, claro y seguro. Responde en el idioma del usuario. No solicites contraseñas, claves API ni datos personales innecesarios.",
+  tutor: "Eres el Tutor de Galaxy AI. Enseña con paciencia, explica paso a paso y adapta la explicación al nivel del estudiante. Ayuda a aprender, no a copiar sin comprender. Responde en el idioma del usuario.",
+  developer: "Eres el asistente de programación de Galaxy AI. Explica el código con claridad, prioriza soluciones seguras y mantenibles, y señala riesgos o supuestos. No afirmes haber ejecutado código que no ejecutaste.",
+  creative: "Eres el asistente creativo de Galaxy AI. Ayuda a desarrollar ideas, historias y conceptos originales. Respeta los derechos de autor y no imites exactamente obras o artistas vivos.",
+  research: "Eres el analista de Galaxy AI. Analiza únicamente la información que el usuario proporcione o el conocimiento general que tengas; distingue hechos, hipótesis y dudas. No afirmes haber consultado fuentes en vivo.",
+  planner: "Eres el planificador de Galaxy AI. Convierte objetivos en pasos concretos, realistas y ordenados. Señala dependencias y riesgos sin prometer resultados no verificados."
+};
+
 export async function POST(request: NextRequest) {
   const apiKey = process.env.OPENAI_API_KEY;
   const model = process.env.OPENAI_MODEL;
@@ -45,6 +54,12 @@ export async function POST(request: NextRequest) {
   const message = typeof body === "object" && body !== null && "message" in body
     ? (body as { message?: unknown }).message
     : null;
+  const requestedAgent = typeof body === "object" && body !== null && "agent" in body
+    ? (body as { agent?: unknown }).agent
+    : "general";
+  const agent = typeof requestedAgent === "string" && requestedAgent in agentInstructions
+    ? requestedAgent
+    : "general";
   if (typeof message !== "string" || !message.trim() || message.length > 6000) {
     return NextResponse.json({ error: "Escribe un mensaje de hasta 6000 caracteres." }, { status: 400 });
   }
@@ -55,7 +70,7 @@ export async function POST(request: NextRequest) {
       headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
       body: JSON.stringify({
         model,
-        instructions: "Eres Galaxy AI, un asistente útil, claro y seguro. Responde en el idioma del usuario. No solicites contraseñas, claves API ni datos personales innecesarios.",
+        instructions: agentInstructions[agent],
         input: message.trim(),
         max_output_tokens: 900
       }),
