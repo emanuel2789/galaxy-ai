@@ -5,6 +5,14 @@ import type { FormEvent } from "react";
 import { Activity, Bot, BrainCircuit, Code2, Compass, ImagePlus, Menu, MessageCircle, Plus, Search, Send, Settings2, Sparkles, Video, X, KeyRound, ShieldCheck } from "lucide-react";
 
 type Message = { role: "user" | "assistant"; content: string };
+const agents = [
+  { id: "tutor", name: "Tutor", description: "Explica temas paso a paso y adapta el nivel." },
+  { id: "developer", name: "Programador", description: "Ayuda a entender, escribir y revisar código." },
+  { id: "creative", name: "Creativo", description: "Desarrolla ideas, historias y conceptos originales." },
+  { id: "research", name: "Analista", description: "Organiza información y compara argumentos." },
+  { id: "planner", name: "Planificador", description: "Convierte objetivos en tareas y pasos claros." }
+];
+
 const modules = [
   { name: "Galaxy Chat", icon: MessageCircle, note: "Conversación inteligente" },
   { name: "Brain", icon: BrainCircuit, note: "Centro de conocimiento" },
@@ -18,6 +26,7 @@ const modules = [
 
 export default function Home() {
   const [active, setActive] = useState("Galaxy Chat");
+  const [selectedAgent, setSelectedAgent] = useState("tutor");
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState<Message[]>([]);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -39,7 +48,7 @@ export default function Home() {
       const response = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json", "x-galaxy-access-code": accessCode },
-        body: JSON.stringify({ message: clean })
+        body: JSON.stringify({ message: clean, agent: active === "Agents" ? selectedAgent : "general" })
       });
       const data = await response.json();
       if (!response.ok) throw new Error(data.error || "No se pudo completar la solicitud.");
@@ -80,17 +89,18 @@ export default function Home() {
         <div className="content">
           <div className="welcome-kicker"><span className="kicker-line"/> GALAXY AI ULTIMATE <span className="kicker-line"/></div>
           <div className="hero-orb"><div className="orb-core"><Sparkles size={31}/></div><div className="orbit orbit-one"/><div className="orbit orbit-two"/></div>
-          <h1>{active==="Galaxy Chat" ? <>Tu universo.<br/><em>Una nueva inteligencia.</em></> : active}</h1>
+          <h1>{active==="Galaxy Chat" || active==="Agents" ? <>Tu universo.<br/><em>Una nueva inteligencia.</em></> : active}</h1>
           <p className="subtitle">{active==="Galaxy Chat" ? "Un espacio para pensar, descubrir y crear sin límites." : "Este módulo está planificado y se habilitará por etapas."}</p>
           {active==="Galaxy Chat" ? <>
-            {messages.length===0 && <div className="suggestions">
+            {active==="Galaxy Chat" && messages.length===0 && <div className="suggestions">
               <button onClick={()=>setMessage("Ayúdame a organizar una idea nueva.")}><BrainCircuit size={17}/><span><b>Explorar una idea</b><small>Convierte pensamientos en un plan</small></span></button>
               <button onClick={()=>setMessage("Ayúdame a crear un proyecto paso a paso.")}><Sparkles size={17}/><span><b>Crear un proyecto</b><small>Empieza con una hoja en blanco</small></span></button>
               <button onClick={()=>setMessage("Explícame un tema de forma sencilla.")}><Compass size={17}/><span><b>Investigar un tema</b><small>Aprende algo nuevo</small></span></button>
             </div>}
+            {active === "Agents" && <section className="agent-picker" aria-label="Elegir asistente"><div className="agent-picker-heading"><b>Elige tu asistente</b><span>Cada agente tiene una especialidad</span></div><div className="agent-grid">{agents.map((agent) => <button type="button" key={agent.id} className={`agent-card ${selectedAgent === agent.id ? "selected" : ""}`} onClick={() => { setSelectedAgent(agent.id); setMessages([]); setError(""); }}><b>{agent.name}</b><small>{agent.description}</small></button>)}</div></section>}
             <div className="thread" aria-live="polite">{messages.map((item,index)=><div key={index} className={`message ${item.role}`}><b>{item.role==="user"?"Tú":"Galaxy AI"}</b><p>{item.content}</p></div>)}{busy&&<div className="message assistant"><b>Galaxy AI</b><p>Preparando respuesta…</p></div>}</div>
             {error&&<div className="error-note" role="alert">{error}</div>}
-            <form className="composer" onSubmit={sendMessage}><textarea value={message} onChange={e=>setMessage(e.target.value)} onKeyDown={e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();void sendMessage();}}} placeholder="Escribe tu mensaje…" rows={2} disabled={busy}/><div className="composer-bottom"><span>Shift + Enter para nueva línea</span><button className="send-button" type="submit" disabled={busy||!message.trim()} aria-label="Enviar mensaje"><Send size={17}/></button></div></form>
+            <form className="composer" onSubmit={sendMessage}><textarea value={message} onChange={e=>setMessage(e.target.value)} onKeyDown={e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();void sendMessage();}}} placeholder={active === "Agents" ? "Pide ayuda a tu asistente…" : "Escribe tu mensaje…"} rows={2} disabled={busy}/><div className="composer-bottom"><span>Shift + Enter para nueva línea</span><button className="send-button" type="submit" disabled={busy||!message.trim()} aria-label="Enviar mensaje"><Send size={17}/></button></div></form>
             <p className="disclaimer">La API se ejecuta en el servidor. No escribas contraseñas ni datos privados en el chat.</p>
           </> : <div className="module-placeholder"><div className="placeholder-icon"><Sparkles size={23}/></div><h2>Módulo en construcción</h2><p>La estructura inicial está lista. Las funciones se añadirán por etapas y con controles de seguridad.</p><button onClick={()=>setActive("Galaxy Chat")}>Volver a Galaxy Chat</button></div>}
           <footer>GALAXY AI ULTIMATE <span>•</span> FUNDACIÓN</footer>
