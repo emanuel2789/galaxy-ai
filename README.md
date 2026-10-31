@@ -8,7 +8,8 @@ Base de Galaxy AI Ultimate para web y móvil, construida con Next.js 15, React 1
 - Clave de OpenAI y código de acceso solo en variables privadas del servidor.
 - Endpoint de estado que informa si la configuración está lista sin revelar secretos.
 - Manifiesto PWA e icono instalable.
-- Brain, Agents, Creative, Video Studio, Research y Analytics son espacios de interfaz; todavía no son funciones completas.
+- Agents ofrece cinco asistentes especializados con instrucciones validadas en el servidor (Tutor, Programador, Creativo, Analista y Planificador).
+- Brain, Creative, Video Studio, Research y Analytics siguen siendo espacios de interfaz; todavía no son funciones completas.
 
 ## Variables privadas en Vercel
 Configura en Project Settings → Environment Variables:
