@@ -1,6 +1,7 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { useState } from "react";
+import type { FormEvent } from "react";
 import { Activity, Bot, BrainCircuit, Code2, Compass, ImagePlus, Menu, MessageCircle, Plus, Search, Send, Settings2, Sparkles, Video, X, KeyRound, ShieldCheck } from "lucide-react";
 
 type Message = { role: "user" | "assistant"; content: string };
