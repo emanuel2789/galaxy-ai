@@ -1,18 +1,40 @@
-# Galaxy AI
+# Galaxy AI Ultimate — Fundación 0.1
 
-Primera versión de la interfaz web adaptable de Galaxy AI.
+Primera base de la nueva versión web + móvil (PWA preparada), construida con Next.js y TypeScript.
 
-## Archivos
-- `index.html`: página principal.
-- `styles.css`: diseño adaptable.
-- `app.js`: interacción básica de demostración.
+## Estado actual
+- Interfaz adaptable a móvil y escritorio.
+- Navegación inicial por módulos.
+- Chat de demostración local: **no llama a ningún modelo de IA**.
+- Base preparada para despliegue en Vercel.
+- No requiere API key para ejecutar la demostración.
 
-## Publicar con GitHub Pages
-1. Sube estos archivos a la raíz del repositorio.
-2. Abre **Settings → Pages**.
-3. Selecciona **Deploy from a branch**, rama `main`, carpeta `/ (root)` y guarda.
+## Requisitos
+- Node.js 20.9 o superior.
+- npm.
 
-## Estado
-Esta versión es solo una interfaz de demostración. El chat no está conectado todavía a una IA real; las funciones de imágenes, videos y mini dramas aún no generan contenido.
+## Ejecutar
+```bash
+npm install
+npm run dev
+```
+Abre http://localhost:3000.
 
-No incluyas claves API ni contraseñas en el código del navegador o en repositorios públicos. Las claves deben guardarse en un backend seguro.
+## Publicar en Vercel
+1. Sube este proyecto a un repositorio GitHub.
+2. En Vercel, importa ese repositorio.
+3. Framework: Next.js; Build command: `npm run build`.
+4. Despliega. No añadas una API key para esta fase.
+
+## Próximas fases
+1. Autenticación y base de datos con límites gratuitos.
+2. Endpoint de servidor para OpenAI, activado solo cuando exista presupuesto.
+3. Memoria y agentes con permisos.
+4. Integración de documentación con Notion.
+5. PWA completa y pruebas en Android.
+
+## Seguridad
+- Nunca pongas `OPENAI_API_KEY` en archivos `NEXT_PUBLIC_*`.
+- Nunca publiques secretos en GitHub.
+- La API de OpenAI puede generar cargos; esta versión no realiza llamadas a ella.
+- No se debe prometer uso gratuito de modelos de pago.
